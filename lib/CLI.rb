@@ -12,6 +12,9 @@ class CLI
   end
 
   def welcome_menu
+    if User.all.length == 0
+      first_use
+    end
     is_running = true
     while is_running
       print_welcome
@@ -43,6 +46,15 @@ class CLI
     puts "9 - Exit Application"
     puts
     print "Your Selection: " 
+  end
+
+  def first_use
+    puts "It looks like this is your first time using this app."
+    puts "Thank you for giving Spender a spin!"
+    puts
+    print "To start off, please enter your name: "
+    name = STDIN.gets.chomp
+    User.create(username: name)
   end
 
   def login_menu
