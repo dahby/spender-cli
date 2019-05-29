@@ -12,3 +12,9 @@ desc "Start our console"
 task :console do 
   Pry.start 
 end
+
+desc "Start our app"
+task :run do
+  cli = CLI.new
+  cli.run
+end
