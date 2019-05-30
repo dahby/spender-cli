@@ -21,6 +21,7 @@ class CLI
       if selection == 1
         log_new_transaction
       elsif selection == 2
+        system("clear")
         @current_user.display_transactions
         puts
       elsif selection == 3
@@ -44,6 +45,8 @@ class CLI
   end
 
   def print_welcome
+    puts "MAIN MENU"
+    puts
     puts "Please make a selection:"
     puts "1 - Log a new transaction"
     puts "2 - Show transactions"
@@ -82,10 +85,10 @@ class CLI
     location = Location.find_or_create_by(name: entered_location)
     print "Price: "
     entered_price = STDIN.gets.chomp.to_f
-    new_transaction = Transaction.new(user: @current_user, location: location, total_price: entered_price)
+    new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price)
     puts
     puts "Is this transaction correct?"
-    puts "#{new_transaction.location.name} - #{new_transaction.total_price}"
+    puts "#{new_transaction.location.name} - #{new_transaction.price}"
     puts
     puts "Press 1 if correct, press 2 to modify, press 9 to exit"
     selection = STDIN.gets.chomp.to_i
