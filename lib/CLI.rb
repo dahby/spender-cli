@@ -20,6 +20,9 @@ class CLI
       selection = STDIN.gets.chomp.to_i
       if selection == 1
         log_new_transaction
+      elsif selection == 2
+        @current_user.display_transactions
+        puts
       elsif selection == 3
         display_about
       elsif selection == 9
@@ -43,6 +46,7 @@ class CLI
   def print_welcome
     puts "Please make a selection:"
     puts "1 - Log a new transaction"
+    puts "2 - Show transactions"
     puts "3 - About Spender"
     puts "9 - Exit Application"
     puts
