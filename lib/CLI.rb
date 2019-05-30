@@ -7,16 +7,16 @@ class CLI
   def run
     system("clear")
     user_check
-    puts "WELCOME TO SPENDER!"
-    puts "Thanks for using this application #{@current_user.username}"
+    puts "~~SPENDER!~~"
+    puts "Welcome #{@current_user.username}"
     puts
-    welcome_menu
+    main_menu
   end
 
-  def welcome_menu
+  def main_menu
     is_running = true
     while is_running
-      print_welcome
+      print_main_menu
       selection = STDIN.gets.chomp.to_i
       if selection == 1
         log_new_transaction
@@ -44,7 +44,7 @@ class CLI
     end
   end
 
-  def print_welcome
+  def print_main_menu
     puts "MAIN MENU"
     puts
     puts "Please make a selection:"
