@@ -5,12 +5,16 @@ class CLI
   end
 
   def run
-    system("clear")
+    clear
     user_check
     puts "~~SPENDER!~~"
     puts "Welcome #{@current_user.username}"
     puts
     main_menu
+  end
+
+  def clear
+    system('clear')
   end
 
   def main_menu
@@ -76,7 +80,7 @@ class CLI
   end
 
   def log_new_transaction
-    system("clear")
+    clear
     puts "LOG NEW TRANSACTION"
     print "Location: "
     entered_location = STDIN.gets.chomp
@@ -101,7 +105,7 @@ class CLI
   end
 
   def show_transactions
-    system("clear")
+    # clear
     @current_user.display_transactions
     puts
     select_transaction
@@ -110,7 +114,53 @@ class CLI
   def select_transaction
     puts "Select a transaction, or press 0 to return main menu"
     selection = STDIN.gets.chomp.to_i
+    if selection == 0
+      clear
+      return
+    end
+    if selection > @current_user.display_transactions.length
+      puts
+      puts "Please enter a valid selection"
+      return show_transactions
+    end
     transaction = @current_user.select_transaction(selection)
-    binding.pry
+    clear
+    single_transaction_menu(transaction)
+  end
+
+  def single_transaction_menu(transaction)
+    print_single_transaction_menu
+    selection = STDIN.gets.chomp.to_i
+    if selection == 1
+      modify_transaction(transaction)
+    elsif selection == 2
+      delete_transaction(transaction)
+    elsif selection == 3
+      show_transactions
+    elsif selection == 4
+      return
+    else 
+      puts "Please enter a valid selection"
+      return single_transaction_menu(transaction)
+    end
+  end
+
+  def print_single_transaction_menu
+    puts "SINGLE TRANSACTION MENU"
+    puts
+    puts "What would you like to do?"
+    puts "1 - Modify transaction"
+    puts "2 - Delete transaction"
+    puts "3 - Back to recent transaction"
+    puts "4 - Back to main menu"
+    puts 
+  end
+
+  def modify_transaction(transaction)
+    puts "MODIFY TRANSACTION MENU"
+  end
+
+  def delete_transaction(transaction)
+    puts "DELETE TRANSACTION MENU"
   end
 end
