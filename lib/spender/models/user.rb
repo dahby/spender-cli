@@ -44,4 +44,15 @@ class User < ActiveRecord::Base
     end
     category_totals
   end
+
+  ## Returns a hash of price totals by location name
+
+  def total_for_transactions_by_location_name
+    location_totals = Hash.new(0)
+    self.transactions.each do |transaction|
+      location = transaction.location.name
+      location_totals[location] += transaction.price
+    end
+    location_totals
+  end
 end
