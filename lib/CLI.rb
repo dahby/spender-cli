@@ -85,6 +85,12 @@ class CLI
     print "Location: "
     entered_location = STDIN.gets.chomp
     location = Location.find_or_create_by(name: entered_location)
+    if !location.category
+      print "Spending Category: "
+      entered_category = STDIN.gets.chomp.downcase
+      location.update(category: entered_category)
+      location.reload
+    end
     print "Price: "
     entered_price = STDIN.gets.chomp.to_f
     new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price)
