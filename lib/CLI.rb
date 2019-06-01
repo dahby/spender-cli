@@ -105,7 +105,9 @@ class CLI
   end
 
   def show_transactions
-    # clear
+    clear
+    puts "RECENT TRANSACTIONS MENU"
+    puts
     @current_user.display_transactions
     puts
     select_transaction
@@ -121,6 +123,7 @@ class CLI
     if selection > @current_user.display_transactions.length
       puts
       puts "Please enter a valid selection"
+      sleep(1)
       return show_transactions
     end
     transaction = @current_user.select_transaction(selection)
@@ -132,12 +135,12 @@ class CLI
     print_single_transaction_menu
     selection = STDIN.gets.chomp.to_i
     if selection == 1
-      modify_transaction(transaction)
+      modify_transaction_menu(transaction)
     elsif selection == 2
       delete_transaction(transaction)
     elsif selection == 3
       show_transactions
-    elsif selection == 4
+    elsif selection == 0
       return
     else 
       puts "Please enter a valid selection"
@@ -152,12 +155,58 @@ class CLI
     puts "1 - Modify transaction"
     puts "2 - Delete transaction"
     puts "3 - Back to recent transaction"
-    puts "4 - Back to main menu"
+    puts "0 - Back to main menu"
     puts 
   end
 
-  def modify_transaction(transaction)
+  def modify_transaction_menu(transaction)
+    print_modify_transaction_menu(transaction)
+    selection = STDIN.gets.chomp.to_i
+    if selection == 1
+      # TODO update location
+    elsif selection == 2
+      update_transaction_price(transaction)
+      # delete_transaction(transaction)
+    elsif selection == 3
+      show_transactions
+    elsif selection == 0
+      return
+    else 
+      puts "Please enter a valid selection"
+      return modify_transaction_menu(transaction)
+    end
+  end
+
+  def print_modify_transaction_menu(transaction)
+    clear
     puts "MODIFY TRANSACTION MENU"
+    puts 
+    puts "1 - Location: #{transaction.location.name}"
+    puts "2 - Price:    $#{transaction.price}"
+    puts "3 - Back to recent transaction"
+    puts "0 - Back to main menu"
+    puts
+    puts "What would you like to change?"
+  end
+
+  def update_transaction_price(transaction)
+    puts
+    print "Enter an new price: "
+    new_price = STDIN.gets.chomp.to_f
+    puts 
+    puts "Is #{new_price} correct?"
+    puts "y/n?"
+    selection = STDIN.gets.chomp.downcase
+    if selection == 'y'
+      transaction.update_price(new_price)
+      transaction.reload
+      clear
+    elsif selection == 'n'
+      return modify_transaction_menu(transaction)
+    else
+      puts "Please enter a valid selection"
+      return update_transaction_price(transaction)
+    end
   end
 
   def delete_transaction(transaction)
