@@ -16,4 +16,8 @@ class User < ActiveRecord::Base
       puts "#{i+1}: #{month}-#{day} - #{location_name} - $#{price}"
     end
   end
+
+  def select_transaction(num)
+    transactions_by_most_recent[num - 1]
+  end
 end

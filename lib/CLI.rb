@@ -21,9 +21,7 @@ class CLI
       if selection == 1
         log_new_transaction
       elsif selection == 2
-        system("clear")
-        @current_user.display_transactions
-        puts
+        show_transactions
       elsif selection == 3
         display_about
       elsif selection == 9
@@ -100,5 +98,19 @@ class CLI
     elsif selection == 9
       return
     end
+  end
+
+  def show_transactions
+    system("clear")
+    @current_user.display_transactions
+    puts
+    select_transaction
+  end
+
+  def select_transaction
+    puts "Select a transaction, or press 0 to return main menu"
+    selection = STDIN.gets.chomp.to_i
+    transaction = @current_user.select_transaction(selection)
+    binding.pry
   end
 end
