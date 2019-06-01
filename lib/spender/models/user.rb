@@ -20,4 +20,12 @@ class User < ActiveRecord::Base
   def select_transaction(num)
     transactions_by_most_recent[num - 1]
   end
+
+  def total_for_all_transactions
+    total = 0
+    self.transactions.each do |transaction|
+      total += transaction.price
+    end
+    total
+  end
 end
