@@ -217,5 +217,19 @@ class CLI
 
   def delete_transaction(transaction)
     puts "DELETE TRANSACTION MENU"
+    puts
+    puts "Are you sure you want to delete this transaction?"
+    puts "#{transaction.created_at.day}/#{transaction.created_at.month} - #{transaction.location.name} - #{transaction.price}"
+    puts "y/n?"
+    puts
+    selection = STDIN.gets.chomp.downcase
+    if selection == 'y'
+      transaction.destroy
+      system('clear')
+      return
+    else
+      system('clear')
+      return single_transaction_menu(transaction)
+    end
   end
 end
