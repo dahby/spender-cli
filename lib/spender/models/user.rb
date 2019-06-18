@@ -20,15 +20,16 @@ class User < ActiveRecord::Base
   def transactions_by_most_recent
     self.transactions.reverse.select do |transaction|
       one_week = Time.now - (60 * 60 * 24 * 7)
-      time_at_creation = transaction.created_at
+      time_at_creation = transaction.purchase_date
+      # binding.pry
       time_at_creation > one_week
     end
   end
 
   def display_transactions
     self.transactions_by_most_recent.each.with_index do |transaction, i|
-      day = transaction.created_at.day
-      month = transaction.created_at.month
+      day = transaction.purchase_date.day
+      month = transaction.purchase_date.month
       location_name = transaction.location.name
       price = transaction.price
       puts "#{i+1}: #{month}-#{day} - #{location_name} - $#{price}"

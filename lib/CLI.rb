@@ -108,7 +108,18 @@ class CLI
     end
     print "Price: "
     entered_price = STDIN.gets.chomp.to_f
-    new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price)
+    puts "Did you make this purchase today?"
+    print "y/n?: "
+    purchased_today = STDIN.gets.chomp.downcase
+    if purchased_today == 'y'
+      new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price, purchase_date: Time.now)
+    else
+      puts
+      print "When did you make this purchase? (m/d): "
+      date_input = STDIN.gets.chomp.split('/')
+      date_purchased = Time.new(Time.now.year, date_input[0], date_input[1])
+      new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price, purchase_date: date_purchased)
+    end
     puts
     puts "Is this transaction correct?"
     puts "#{new_transaction.location.name} - #{new_transaction.price}"
@@ -116,6 +127,7 @@ class CLI
     puts "Press 1 if correct, press 2 to modify, press 9 to exit"
     selection = STDIN.gets.chomp.to_i
     if selection == 1
+      binding.pry
       new_transaction.save
       @current_user.reload
     elsif selection == 2
@@ -234,7 +246,7 @@ class CLI
     puts "DELETE TRANSACTION MENU"
     puts
     puts "Are you sure you want to delete this transaction?"
-    puts "#{transaction.created_at.day}/#{transaction.created_at.month} - #{transaction.location.name} - #{transaction.price}"
+    puts "#{transaction.purchase_date.day}/#{transaction.purchase_date.month} - #{transaction.location.name} - #{transaction.price}"
     puts "y/n?"
     puts
     selection = STDIN.gets.chomp.downcase
