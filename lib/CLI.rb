@@ -198,7 +198,7 @@ class CLI
     puts 
     puts "1 - Location: #{transaction.location.name}"
     puts "2 - Price:    $#{transaction.price}"
-    puts "3 - Purchase Date: #{transaction.purchase_date}"
+    puts "3 - Purchase Date: #{transaction.purchase_date.month}/#{transaction.purchase_date.day}/#{transaction.purchase_date.year}"
     puts "4 - Back to recent transactions"
     puts "0 - Back to main menu"
     puts
