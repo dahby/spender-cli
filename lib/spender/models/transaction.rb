@@ -24,4 +24,9 @@ class Transaction < ActiveRecord::Base
   def update_location(new_location)
     self.update(location: new_location)
   end
+
+  def update_purchase_date(day, month, year)
+    new_date = Time.local(year, month, day)
+    self.update(purchase_date: new_date)
+  end
 end

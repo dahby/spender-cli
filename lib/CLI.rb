@@ -115,9 +115,9 @@ class CLI
       new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price, purchase_date: Time.now)
     else
       puts
-      print "When did you make this purchase? (m/d): "
+      print "When did you make this purchase? (mm/dd/yyyy): "
       date_input = STDIN.gets.chomp.split('/')
-      date_purchased = Time.new(Time.now.year, date_input[0], date_input[1])
+      date_purchased = Time.new(date_input[2], date_input[0], date_input[1])
       new_transaction = Transaction.new(user: @current_user, location: location, price: entered_price, purchase_date: date_purchased)
     end
     puts
@@ -192,6 +192,20 @@ class CLI
     puts 
   end
 
+  def print_modify_transaction_menu(transaction)
+    clear
+    puts "MODIFY TRANSACTION MENU"
+    puts 
+    puts "1 - Location: #{transaction.location.name}"
+    puts "2 - Price:    $#{transaction.price}"
+    puts "3 - Purchase Date: #{transaction.purchase_date.month}/#{transaction.purchase_date.day}/#{transaction.purchase_date.year}"
+    puts "4 - Back to recent transactions"
+    puts "0 - Back to main menu"
+    puts
+    puts "What would you like to change?"
+  end
+
+
   def modify_transaction_menu(transaction)
     print_modify_transaction_menu(transaction)
     selection = STDIN.gets.chomp.to_i
@@ -199,8 +213,9 @@ class CLI
       # TODO update location
     elsif selection == 2
       update_transaction_price(transaction)
-      # delete_transaction(transaction)
     elsif selection == 3
+      update_purchase_date(transaction)
+    elsif selection == 4
       show_transactions
     elsif selection == 0
       return
@@ -208,18 +223,6 @@ class CLI
       puts "Please enter a valid selection"
       return modify_transaction_menu(transaction)
     end
-  end
-
-  def print_modify_transaction_menu(transaction)
-    clear
-    puts "MODIFY TRANSACTION MENU"
-    puts 
-    puts "1 - Location: #{transaction.location.name}"
-    puts "2 - Price:    $#{transaction.price}"
-    puts "3 - Back to recent transaction"
-    puts "0 - Back to main menu"
-    puts
-    puts "What would you like to change?"
   end
 
   def update_transaction_price(transaction)
@@ -239,6 +242,27 @@ class CLI
     else
       puts "Please enter a valid selection"
       return update_transaction_price(transaction)
+    end
+  end
+
+  def update_purchase_date(transaction)
+    puts
+    print "Enter a new date (mm/dd/yyy): "
+    date_input = STDIN.gets.chomp.split('/')
+    puts 
+    print "Is #{date_input[0]}/#{date_input[1]}/#{date_input[2]} the correct date? (y/n): "
+    selection = STDIN.gets.chomp.downcase
+    if selection == 'y'
+      transaction.update_purchase_date(date_input[1].to_i, date_input[0].to_i, date_input[2].to_i)
+      transaction.reload
+      puts "Purchase date updated!"
+      sleep(1)
+      clear
+    elsif selection == 'n'
+      return modify_transaction_menu(transaction)
+    else
+      puts "Please enter a valid selection"
+      return update_purchase_date(transaction)
     end
   end
 
