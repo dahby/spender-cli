@@ -42,6 +42,9 @@ class CLI
       elsif selection == 2
         show_transactions
       elsif selection == 3
+        clear
+        show_stats
+      elsif selection == 4
         display_about
       elsif selection == 9
         puts "THANK YOU!!!"
@@ -67,7 +70,8 @@ class CLI
     puts "Please make a selection:"
     puts "1 - Log a new transaction"
     puts "2 - Show transactions"
-    puts "3 - About Spender"
+    puts "3 - Show purchase stats"
+    puts "4 - About Spender"
     puts "9 - Exit Application"
     puts
     print "Your Selection: " 
@@ -119,7 +123,6 @@ class CLI
     puts "Press 1 if correct, press 2 to modify, press 9 to exit"
     selection = STDIN.gets.chomp.to_i
     if selection == 1
-      binding.pry
       new_transaction.save
       @current_user.reload
     elsif selection == 2
@@ -196,7 +199,6 @@ class CLI
     puts
     puts "What would you like to change?"
   end
-
 
   def modify_transaction_menu(transaction)
     print_modify_transaction_menu(transaction)
@@ -313,5 +315,56 @@ class CLI
 
   def date(timestamp)
     "#{timestamp.month}/#{timestamp.day}/#{timestamp.year}"
+  end
+
+  def show_stats
+    show_stats_menu
+    selection = STDIN.gets.chomp.to_i
+    if selection == 1
+      clear
+      total_by_category
+    elsif selection == 2
+      clear
+      total_by_location
+    elsif selection == 0
+      clear
+      return 
+    else
+      puts "Please enter a valid selection"
+      sleep(1)
+      return show_stats
+    end
+  end
+
+  def show_stats_menu
+    puts "PURCHASE STATISTICS"
+    puts
+    puts "What would you like to view?"
+    puts "1 - View total spent by category"
+    puts "2 - View total spent by location"
+    puts "0 - Return to main menu"
+    puts
+  end
+
+  def total_by_category
+    puts "TOTALS BY CATEGORY"
+
+    puts "Enter 9 to return to main menu"
+    selection = STDIN.gets.chomp.to_i
+    if selection == 9
+      clear
+      return
+    end
+  end
+
+  def total_by_location
+    puts "TOTALS BY LOCATION"
+
+    puts "Enter 9 to return to main menu"
+    selection = STDIN.gets.chomp.to_i
+    if selection == 9
+      clear
+      return
+    end
   end
 end
