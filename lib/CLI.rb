@@ -97,15 +97,16 @@ class CLI
   def log_new_transaction
     clear
     puts "LOG NEW TRANSACTION"
-    print "Location: "
-    entered_location = STDIN.gets.chomp
-    location = Location.find_or_create_by(name: entered_location)
-    if !location.category
-      print "Spending Category: "
-      entered_category = STDIN.gets.chomp.downcase
-      location.update(category: entered_category)
-      location.reload
-    end
+    # print "Location: "
+    # entered_location = STDIN.gets.chomp
+    # location = Location.find_or_create_by(name: entered_location)
+    # if !location.category
+    #   print "Spending Category: "
+    #   entered_category = STDIN.gets.chomp.downcase
+    #   location.update(category: entered_category)
+    #   location.reload
+    # end
+    location = set_location
     print "Price: "
     entered_price = STDIN.gets.chomp.to_f
     puts "Did you make this purchase today?"
@@ -122,7 +123,7 @@ class CLI
     end
     puts
     puts "Is this transaction correct?"
-    puts "#{new_transaction.location.name} - #{new_transaction.price}"
+    puts "#{date(new_transaction.purchase_date)}: #{new_transaction.location.name} - #{new_transaction.price}"
     puts
     puts "Press 1 if correct, press 2 to modify, press 9 to exit"
     selection = STDIN.gets.chomp.to_i
@@ -198,7 +199,7 @@ class CLI
     puts 
     puts "1 - Location: #{transaction.location.name}"
     puts "2 - Price:    $#{transaction.price}"
-    puts "3 - Purchase Date: #{transaction.purchase_date.month}/#{transaction.purchase_date.day}/#{transaction.purchase_date.year}"
+    puts "3 - Purchase Date: #{date(transaction.purchase_date)}"
     puts "4 - Back to recent transactions"
     puts "0 - Back to main menu"
     puts
@@ -270,7 +271,7 @@ class CLI
     puts "DELETE TRANSACTION MENU"
     puts
     puts "Are you sure you want to delete this transaction?"
-    puts "#{transaction.purchase_date.day}/#{transaction.purchase_date.month} - #{transaction.location.name} - #{transaction.price}"
+    puts "#{date(transaction.purchase_date)} - #{transaction.price}"
     puts "y/n?"
     puts
     selection = STDIN.gets.chomp.downcase
@@ -282,5 +283,22 @@ class CLI
       system('clear')
       return single_transaction_menu(transaction)
     end
+  end
+
+  def set_location
+    print "Location: "
+    entered_location = STDIN.gets.chomp
+    location = Location.find_or_create_by(name: entered_location)
+    if !location.category
+      print "Spending Category: "
+      entered_category = STDIN.gets.chomp.downcase
+      location.update(category: entered_category)
+      location.reload
+    end
+    return location
+  end
+
+  def date(timestamp)
+    "#{timestamp.month}/#{timestamp.day}/#{timestamp.year}"
   end
 end
