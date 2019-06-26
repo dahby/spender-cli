@@ -97,15 +97,6 @@ class CLI
   def log_new_transaction
     clear
     puts "LOG NEW TRANSACTION"
-    # print "Location: "
-    # entered_location = STDIN.gets.chomp
-    # location = Location.find_or_create_by(name: entered_location)
-    # if !location.category
-    #   print "Spending Category: "
-    #   entered_category = STDIN.gets.chomp.downcase
-    #   location.update(category: entered_category)
-    #   location.reload
-    # end
     location = set_location
     print "Price: "
     entered_price = STDIN.gets.chomp.to_f
@@ -211,7 +202,7 @@ class CLI
     print_modify_transaction_menu(transaction)
     selection = STDIN.gets.chomp.to_i
     if selection == 1
-      # TODO update location
+      update_location(transaction)
     elsif selection == 2
       update_transaction_price(transaction)
     elsif selection == 3
@@ -226,6 +217,26 @@ class CLI
     end
   end
 
+  def update_location(transaction)
+    puts "UPDATE TRANSACTION LOCATION"
+    new_location = set_location
+    puts "Is #{new_location.name} correct?"
+    puts "y/n?"
+    selection = STDIN.gets.chomp.downcase
+    if selection == 'y'
+      transaction.update_location(new_location)
+      transaction.reload
+      puts "Location updated!"
+      sleep(1)
+      clear
+    elsif selection == 'n'
+      return modify_transaction_menu(transaction)
+    else
+      puts "Please enter a valid selection"
+      return update_transaction_price(transaction)
+    end
+  end
+
   def update_transaction_price(transaction)
     puts
     print "Enter an new price: "
@@ -237,6 +248,8 @@ class CLI
     if selection == 'y'
       transaction.update_price(new_price)
       transaction.reload
+      puts "Transaction price updated!"
+      sleep(1)
       clear
     elsif selection == 'n'
       return modify_transaction_menu(transaction)
