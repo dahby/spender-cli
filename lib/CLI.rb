@@ -263,7 +263,7 @@ class CLI
 
   def update_purchase_date(transaction)
     puts
-    print "Enter a new date (mm/dd/yyy): "
+    print "Enter a new date (mm/dd/yyyy): "
     date_input = STDIN.gets.chomp.split('/')
     puts 
     print "Is #{date_input[0]}/#{date_input[1]}/#{date_input[2]} the correct date? (y/n): "
